@@ -1,0 +1,43 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/01/28 09:35:09 by marvin            #+#    #+#              #
+#    Updated: 2021/02/08 09:41:01 by marvin           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME		= libftprintf.a
+
+SRCS		=	ft_printf.c			\
+				ft_printf_utils1.c	\
+				ft_convert_base.c	\
+				ft_convert_base2.c	\
+				ft_printf_utils2.c	\
+				ft_printf_utils3.c	\
+				printing.c			\
+				printing2.c			\
+				struct_utils.c		\
+
+OBJS		= $(addprefix src/, ${SRCS:.c=.o})
+
+.c.o:
+			gcc -Wall -Wextra -Werror -c -I./includes/libftprintf.h $< -o $< -o ${<:.c=.o}
+
+${NAME}:	${OBJS}
+			ar -rcs $@ $^
+
+all:		${NAME}
+
+clean:
+			rm -f ${OBJS}
+
+fclean:		clean
+			rm -f ${NAME}
+
+re:			fclean all
+
+.PHONY:		all clean fclean re
