@@ -6,11 +6,9 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 12:20:06 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/05 13:37:23 by marvin           ###   ########.fr       */
+/*   Updated: 2021/02/11 14:01:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libftprintf.h"
 
 char	*convertwithp(unsigned long int nb, char *base)
 {
@@ -18,7 +16,7 @@ char	*convertwithp(unsigned long int nb, char *base)
 	
 	if (!(nbr = malloc(sizeof(char) * (ft_nblen(nb, ft_strlen(base)) + 1))))
 		return (0);
-	ft_putnbr_base(nb, "0123456789abcdef", nbr);
+	ft_putnbr_base(nb, base, nbr);
 	ft_revtab(nbr);
 	return (nbr);
 }
@@ -44,4 +42,46 @@ void	ft_put_unsignednbr(unsigned int	nb)
 	}
 	else if (nb < 10)
 		ft_putchar(nb + 48);
+}
+
+void	ft_checkpointpos(t_print *print, char *str, int d)
+{
+	int		i;
+
+	i = 0;
+	while (i < d && str[i] != '.' && str[i])
+		i++;
+	if (str[i] == '.')
+	{
+		while (i > 0)
+		{
+			if (str[i] == '*' || (str[i] > '0' && str[i] <= '9'))
+			{
+				if (print->flag->width[1] < 0)
+					print->flag->width[1] = 0;
+				break;
+			}
+			i--;
+		}
+		/*if (i == 0 && print->flag->width[0] < 0)
+		{
+			print->flag->width[0] = 0;
+		}*/
+	}
+}
+
+void	ft_print_space(t_print *print, int len)
+{
+	while (print->flag->width[0] > print->flag->width[1] && print->flag->width[0] > len)
+	{
+		ft_putchar(' ');
+		print->flag->width[0]--;
+	}
+	if (print->flag->width[1] < 0)
+		print->flag->width[1] = 0;
+	while (print->flag->width[1] > len && print->flag->width[1] != 0)
+	{
+		ft_putchar('0');
+		print->flag->width[1]--;
+	}
 }

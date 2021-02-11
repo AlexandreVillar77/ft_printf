@@ -6,11 +6,9 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 09:54:41 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/05 13:02:07 by marvin           ###   ########.fr       */
+/*   Updated: 2021/02/11 14:01:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libftprintf.h"
 
 void	ft_putchar(char c)
 {
@@ -50,18 +48,19 @@ void	ft_putnbr(int	n)
 
 int		sizeofnmint(int nb, int s, int n)
 {
-	if (n != 0)
+	unsigned int x;
+	
+	if (n < 0)
 	{
+		x = n * -1;
 		s++;
-		if (nb == 0 && n < 0)
-			nb = n * -1;
-		else
-			nb = n;
-		n = 0;
+		return (sizeofint(x, s += 1, 0));
 	}
-	if (nb < 10)
-		return (s);
-	return (sizeofnmint(nb / 10, s += 1, n));
+	else
+	{
+		x = n;
+		return (sizeofint(x , s += 1, 0)); 
+	}
 }
 
 int		ft_strnstr(const char *haystack, const char *needle, size_t len)

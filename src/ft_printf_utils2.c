@@ -6,47 +6,45 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 14:27:48 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/05 14:30:28 by marvin           ###   ########.fr       */
+/*   Updated: 2021/02/11 14:01:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-
-void	printwidth1(struct t_print *print, int len)
+void	printwidth1(t_print *print, int len)
 {
-	if (print->flag->width > 0)
+	if (print->flag->width[0] > 0)
 	{
 		if (print->flag->flagZero == 0)
-			while (print->flag->width > len)
+			while (print->flag->width[0] > len)
 			{
-				print->flag->width--;
+				print->flag->width[0]--;
 				ft_putchar(' ');
 			}
 		else
-			while (print->flag->width > len)
+			while (print->flag->width[0] > len)
 			{
-				print->flag->width--;
+				print->flag->width[0]--;
 				ft_putchar('0');
 			}
 	}
 }
 
-void	printwidth2(struct t_print *print, int len)
+void	printwidth2(t_print *print, int len, int call)
 {
-	if (print->flag->width > 0)
+	if (call == 1)
 	{
-		if (print->flag->flagZero == 0 && print->flag->flagPoint == 0)
-			while (print->flag->width > len)
-			{
-				print->flag->width--;
-				ft_putchar(' ');
-			}
-		else if (print->flag->flagPoint == 1 || print->flag->flagZero == 1)
-			while (print->flag->width > len)
-			{
-				print->flag->width--;
-				ft_putchar('0');
-			}
+		print->flag->conswidth = print->flag->width[1];
+		if (print->flag->width[1] > print->flag->width[0] && print->flag->width[0] > 0)
+			print->flag->width[0] = print->flag->width[1];
+		else if (print->flag->width[0] > print->flag->width[1] || print->flag->width[0] < 0)
+			ft_print_space(print, len);
+	}
+	else if (call == 2)
+	{
+		if (print->flag->width[0] < 0)
+			if ((print->flag->width[0] * -1) < print->flag->conswidth && print->flag->conswidth > 0)
+				print->flag->width[1] = print->flag->conswidth;
+		ft_print_space_less(print, len);
 	}
 }
 
@@ -89,7 +87,7 @@ int		ft_atoi(char *str)
 	return (rtn * nb);
 }
 
-int		ft_managetype1(char c, struct t_print *print)
+int		ft_managetype1(char c, t_print *print)
 {
 	if (c == 'c')
 		return (print1(print));

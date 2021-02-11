@@ -6,13 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 14:27:32 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/05 14:52:19 by marvin           ###   ########.fr       */
+/*   Updated: 2021/02/11 14:01:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-
-int		ft_arg(const char *str, struct t_print *print)
+int		ft_arg(const char *str, t_print *print)
 {
 	int		i;
 	char	toprint;
@@ -26,13 +24,18 @@ int		ft_arg(const char *str, struct t_print *print)
 	}
 	else if (str[i] && str[i] == '%')
 		i++;
+	print->flag = initflag();
 	fillflag((char *)(str + i), print);
 	i += print->flag->nbchar;
+	while ((str[i] >= '0' && str[i] <= '9' && str[i]) || (str[i] == '0' ||
+			str[i] == '-' || str[i] == '.' || str[i] == '*'))
+		i++;
 	print->printedchar += ft_managetype1(str[i], print);
+	resetflag(print->flag);
 	return (i);
 }
 
-int		ft_read(struct t_print *print, const char *str)
+int		ft_read(t_print *print, const char *str)
 {
 	int		i;
 	int		count;
@@ -50,14 +53,16 @@ int		ft_read(struct t_print *print, const char *str)
 			ft_putchar(str[i]);
 		count++;
 		i++;
+		if (i > ft_strlen((char*)str))
+			break;
 	}
 	return (count);
 }
 
 int		ft_printf(const char *str, ...)
 {
-	int				rtn;
-	struct	t_print *print;
+	int			rtn;
+	t_print		*print;
 
 	rtn = 0;
 	
@@ -66,7 +71,6 @@ int		ft_printf(const char *str, ...)
 	rtn = ft_read(print, str);
 	rtn += print->printedchar;
 	va_end(print->va);
-	free (print->flag);
-	free (print);
+	free(print);
 	return (rtn);
 }

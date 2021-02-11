@@ -6,11 +6,9 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:22:06 by avillar           #+#    #+#             */
-/*   Updated: 2021/02/05 13:41:11 by marvin           ###   ########.fr       */
+/*   Updated: 2021/02/11 14:01:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libftprintf.h"
 
 int		inbase(char *base, char c)
 {
