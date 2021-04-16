@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libftprintf.h"
+
 t_print	*initprint()
 {
 	t_print *print;
@@ -27,6 +29,7 @@ void	resetflag(t_flag *flag)
 	flag->flagPoint = 0;
 	flag->flagStar = 0;
 	flag->flagZero = 0;
+	flag->Printzero = 0;
 	flag->nbchar = 0;
 	flag->nbwidth = 0;
 	flag->conswidth = 0;
@@ -48,6 +51,7 @@ t_flag	*initflag()
 	flag->flagPoint = 0;
 	flag->flagStar = 0;
 	flag->flagZero = 0;
+	flag->Printzero = 0;
 	flag->nbchar = 0;
 	flag->nbwidth = 0;
 	flag->conswidth = 0;
@@ -61,17 +65,18 @@ void	fillflag(char *str, t_print *print)
 {
 	int		d;
 
-	d = 0;
-	if (ft_atoi(str) > 0)
+	d = pre_manage_flag(str, print);
+	if (ft_atoi(str + d) > 0)
 	{
-		print->flag->width[0] = ft_atoi(str);
+		print->flag->width[0] = ft_atoi(str + d);
 		while (str[d] >= '0' && str[d] <= '9')
 			d++;
-		str = str + d;
+		if (!(str[d] > 64 && str[d] < 91 || str[d] > 96 && str[d] < 123))
+			str = str + d;
 		print->flag->nbwidth = 1;
-		print->flag->nbchar += d;
 		d = 0;
 	}
+	flagstarmanage(str, print, d);
 	while (str[d] && (str[d] == '0' || str[d] == '-' || str[d] == '.' ||
 			str[d] == '*'))
 			d++;
@@ -79,9 +84,10 @@ void	fillflag(char *str, t_print *print)
 		print->flag->flagZero = 1;
 	if (ft_strnstr(str, "-", d) == '-')
 		print->flag->flagLess = 1;
-	flagstarmanage(str, print, d);
 	if (ft_strnstr(str, ".", d) == '.')
 		print->flag->flagPoint = 1;
+	if (print->flag->width[0] < 0 && print->flag->flagPoint == 1)
+		print->flag->width[0] = 1;
 	ft_checkpointpos(print, str, d);
 }
 
@@ -103,7 +109,7 @@ void	flagstarmanage(char *str, t_print *print, int d)
 			d++;
 	if ((ft_strnstr(str, "*", d) == '*') && print->flag->width[1] == 0 && print->flag->nbwidth == 1)
 		print->flag->width[1] = va_arg(print->va, int);
-	if (ft_atoi(str + d) != 0 && print->flag->width[1] == 0 && print->flag->nbwidth == 1)
+	if ((ft_atoi(str + d) != 0 || (str[d] >= '0' && str[d] <= '9'))&& print->flag->width[1] == 0 && print->flag->nbwidth == 1)
 		print->flag->width[1] = ft_atoi(str + d);
 	while ((str[d] >= '0' && str[d] <= '9' && str[d]) || (str[d] == '0' ||
 			str[d] == '-' || str[d] == '.' || str[d] == '*'))

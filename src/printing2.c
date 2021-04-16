@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libftprintf.h"
+
 int		unsigned_put_nbr(t_print *print)
 {
 	int		rtn;
@@ -22,10 +24,10 @@ int		unsigned_put_nbr(t_print *print)
 		rtn += print->flag->width[0] - rtn;
 	if (print->flag->width[0] > ft_nblen((unsigned long int) nb, 10))
 		if (print->flag->flagLess == 0)
-			printwidth2(print, ft_nblen((unsigned long int)nb, 10), 1);
+			printwidth2(rtn, print, ft_nblen((unsigned long int)nb, 10), 1);
 	ft_put_unsignednbr(nb);
 	if (print->flag->flagLess == 1)
-		printwidth2(print, ft_nblen((unsigned long int)nb, 10), 2);
+		printwidth2(rtn, print, ft_nblen((unsigned long int)nb, 10), 2);
 	return (rtn);
 }
 
@@ -43,10 +45,10 @@ int		unsigned_put_nb_base(t_print *print)
 		rtn += print->flag->width[0] - rtn;
 	if (print->flag->width[0] > ft_nblen((unsigned long int)nb, 16))
 		if (print->flag->flagLess == 0)
-			printwidth2(print, ft_nblen((unsigned long int)nb, 16), 1);
+			printwidth2(rtn, print, ft_nblen((unsigned long int)nb, 16), 1);
 	ft_putstr(n);
 	if (print->flag->flagLess == 1)
-		printwidth2(print, ft_nblen((unsigned long int)nb, 16), 2);
+		printwidth2(rtn, print, ft_nblen((unsigned long int)nb, 16), 2);
 	free(n);
 	return (rtn);
 }
@@ -65,10 +67,10 @@ int		unsigned_put_nb_maj_base(t_print *print)
 		rtn += print->flag->width[0] - rtn;
 	if (print->flag->width[0] > ft_nblen((unsigned long int)nb, 16))
 		if (print->flag->flagLess == 0)
-			printwidth2(print, ft_nblen((unsigned long int)nb, 16), 1);
+			printwidth2(rtn, print, ft_nblen((unsigned long int)nb, 16), 1);
 	ft_putstr(n);
 	if (print->flag->flagLess == 1)
-		printwidth2(print, ft_nblen((unsigned long int)nb, 16), 2);
+		printwidth2(rtn, print, ft_nblen((unsigned long int)nb, 16), 2);
 	free(n);
 	return (rtn);
 }

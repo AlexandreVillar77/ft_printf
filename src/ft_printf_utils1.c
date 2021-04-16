@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libftprintf.h"
+
 void	ft_putchar(char c)
 {
 	write(1, &c, 1);
@@ -32,7 +34,6 @@ void	ft_putnbr(int	n)
 	nb = 0;
 	if (n < 0)
 	{
-		ft_putchar('-');
 		nb = n * -1;
 	}
 	else if (n > 0)
@@ -46,19 +47,24 @@ void	ft_putnbr(int	n)
 		ft_putchar(nb + 48);
 }
 
-int		sizeofnmint(int nb, int s, int n)
+int		sizeofnmint(unsigned int nb, int s, int n, t_print *print)
 {
 	unsigned int x;
 	
 	if (n < 0)
 	{
 		x = n * -1;
-		s++;
 		return (sizeofint(x, s += 1, 0));
 	}
 	else
 	{
 		x = n;
+		if (x == 0)
+		{
+			if (nb == 0 && (print->flag->flagPoint == 0 || 
+				print->flag->width[1] != 0 || print->flag->width[0] != 0))
+				s += 1;
+		}
 		return (sizeofint(x , s += 1, 0)); 
 	}
 }

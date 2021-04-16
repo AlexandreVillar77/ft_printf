@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libftprintf.h"
+
 void	printwidth1(t_print *print, int len)
 {
 	if (print->flag->width[0] > 0)
@@ -29,21 +31,32 @@ void	printwidth1(t_print *print, int len)
 	}
 }
 
-void	printwidth2(t_print *print, int len, int call)
+void	printwidth2(int rtn, t_print *print, int len, int call)
 {
 	if (call == 1)
 	{
+		if (rtn == 0 && print->flag->flagPoint == 1 && print->flag->width[0] > 0)
+			len = 0;
+		if (print->flag->width[1] < 0 && print->flag->width[0] != 0)
+			print->flag->width[1] = 0;
 		print->flag->conswidth = print->flag->width[1];
+		//printf("width 1 : %d \n", print->flag->width[1]);
 		if (print->flag->width[1] > print->flag->width[0] && print->flag->width[0] > 0)
 			print->flag->width[0] = print->flag->width[1];
-		else if (print->flag->width[0] > print->flag->width[1] || print->flag->width[0] < 0)
-			ft_print_space(print, len);
+		ft_print_space(print, len);
 	}
 	else if (call == 2)
 	{
+		if (rtn == 0 && print->flag->flagPoint == 0 && print->flag->width[0] != 0)
+			len++;
+		else if (rtn == 0 && print->flag->flagPoint == 1 && len == 1)
+			len = 0;
 		if (print->flag->width[0] < 0)
 			if ((print->flag->width[0] * -1) < print->flag->conswidth && print->flag->conswidth > 0)
 				print->flag->width[1] = print->flag->conswidth;
+		print->flag->width[1] = print->flag->conswidth;
+		if (print->flag->conswidth > len)
+			len = 1;
 		ft_print_space_less(print, len);
 	}
 }

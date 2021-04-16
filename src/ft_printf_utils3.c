@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libftprintf.h"
+
 char	*convertwithp(unsigned long int nb, char *base)
 {
 	char	*nbr;
@@ -51,28 +53,42 @@ void	ft_checkpointpos(t_print *print, char *str, int d)
 	i = 0;
 	while (i < d && str[i] != '.' && str[i])
 		i++;
-	if (str[i] == '.')
-	{
+	if (str[i - 1] != '*')
+		if (str[i - 1] > '9' || str[i - 1] < '1')
+			if (print->flag->width[0] != 0)
+			{
+				print->flag->Printzero = 1;
+				if (print->flag->width[0] < 0)
+					print->flag->width[1] = print->flag->width[0] * -1;
+				else
+					print->flag->width[1] = print->flag->width[0];
+				print->flag->width[0] = 0;
+			}
+	
+	/*if (str[i] == '.')
 		while (i > 0)
 		{
-			if (str[i] == '*' || (str[i] > '0' && str[i] <= '9'))
+			if (str[i] == '*' || (str[i] > '0' && str[i] <= '9') && print->flag->width[0] == 0)
 			{
-				if (print->flag->width[1] < 0)
+				if (print->flag->width[1] > 0)
 					print->flag->width[1] = 0;
 				break;
 			}
 			i--;
-		}
-		/*if (i == 0 && print->flag->width[0] < 0)
-		{
-			print->flag->width[0] = 0;
 		}*/
-	}
 }
 
 void	ft_print_space(t_print *print, int len)
 {
-	while (print->flag->width[0] > print->flag->width[1] && print->flag->width[0] > len)
+	if (print->flag->flagLess == 0 && print->flag->flagZero == 1 &&
+		 print->flag->width[1] == 0 &&
+		  print->flag->width[0] > print->flag->width[1])
+		{
+			print->flag->width[1] = print->flag->width[0];
+			print->flag->width[0] = 0;
+		}
+	while (print->flag->width[0] > print->flag->width[1] &&
+			print->flag->width[0] > len && print->flag->flagLess == 0)
 	{
 		ft_putchar(' ');
 		print->flag->width[0]--;

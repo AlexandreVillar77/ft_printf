@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libftprintf.h"
+
 int		ft_arg(const char *str, t_print *print)
 {
 	int		i;
@@ -31,6 +33,7 @@ int		ft_arg(const char *str, t_print *print)
 			str[i] == '-' || str[i] == '.' || str[i] == '*'))
 		i++;
 	print->printedchar += ft_managetype1(str[i], print);
+	//printf("width 1 : %d \nwidth 2 : %d \n", print->flag->width[0], print->flag->width[1]);
 	resetflag(print->flag);
 	return (i);
 }

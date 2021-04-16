@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libftprintf.h"
+
 int		print1(t_print *print)
 {
 	char	c;
@@ -65,17 +67,28 @@ int		ft_putnbrarg(t_print *print)
 {
 	int		nb;
 	int		rtn;
+	int		zero;
 
+	//printf("width 0 : %d /// width 1 : %d \n", print->flag->width[0], print->flag->width[1]);
 	nb = va_arg(print->va, int);
-	rtn = assign_rtn(print, sizeofnmint( 0, 0, nb));
-	if (print->flag->flagLess == 0 && (print->flag->width[0] != 0 || print->flag->width[1] > 0))
-		printwidth2(print, sizeofnmint(0, 0, nb), 1);
-	if (nb != 0 || (print->flag->width[0] != 0 || print->flag->width[1] > 0))
-		ft_putnbr(nb);
-	if (print->flag->flagLess == 1 || print->flag->width[0] < 0 || print->flag->width[1] > 0)
+	zero = 1;
+	rtn = checkifneg(nb, print) + assign_rtn(print, sizeofnmint( 0, 0, nb, print));
+	if (nb == 0 && print->flag->flagPoint == 1 && print->flag->width[1] == 0)
+		zero = 0;
+	if (printZero(print->flag) == 1)
+		printwidth2(zero ,print, sizeofnmint(0, 0, nb, print), 1);
+	if (nb == 0 && (print->flag->flagPoint == 0 || 
+		print->flag->width[1] != 0 || print->flag->width[0] != 0))
 	{
-		printwidth2(print, sizeofnmint(0, 0, nb), 2);
+		ft_putnbr(nb);
+		zero--;
+		if (print->flag->width[0] == 0 && rtn == 0)
+			rtn++;
 	}
+	else if (nb != 0)
+		ft_putnbr(nb);
+	if (print->flag->flagLess == 1 || print->flag->width[0] < 0)
+		printwidth2(zero, print, sizeofnmint(0, 0, nb, print), 2);
 	return (rtn);
 }
 
@@ -95,12 +108,12 @@ int		unsinged_long_conv(t_print *print)
 	if (print->flag->width[0] > ft_nblen(nb, 16))
 		if (print->flag->flagLess == 0)
 		{
-			printwidth2(print, ft_nblen(nb, 16), 1);
+			printwidth2(rtn, print, ft_nblen(nb, 16), 1);
 			ft_putstr(n);
 		}	
 	if (print->flag->flagLess == 1)
 	{
-		printwidth2(print, ft_nblen(nb, 16), 1);
+		printwidth2(rtn, print, ft_nblen(nb, 16), 1);
 		ft_putstr(n);
 	}
 	print->printedchar += 2;
